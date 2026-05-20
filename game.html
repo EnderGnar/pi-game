@@ -340,6 +340,14 @@
 
 <div id="settings">
   <div class="glass-pill">
+    <span>Constant</span>
+    <div class="length-btns" id="constant-btns">
+      <button class="length-btn active" data-const="pi">π</button>
+      <button class="length-btn" data-const="e">e</button>
+      <button class="length-btn" data-const="phi">φ</button>
+    </div>
+  </div>
+  <div class="glass-pill">
     <label for="toggle-hint">Show next</label>
     <button class="toggle-btn active" id="toggle-hint">ON</button>
   </div>
@@ -487,8 +495,25 @@
     return Math.max(0.15, 1 - i * 0.09);
   }
 
+  function getDigits() {
+    if (state.constant === 'e') return E_DIGITS;
+    if (state.constant === 'phi') return GOLDEN_DIGITS;
+    return PI_DIGITS;
+  }
+  function getPrefix() {
+    if (state.constant === 'e') return '2.';
+    if (state.constant === 'phi') return '1.';
+    return '3.';
+  }
+  function getSymbol() {
+    if (state.constant === 'e') return 'e';
+    if (state.constant === 'phi') return 'φ';
+    return 'π';
+  }
+
   // State
   let state = {
+    constant: 'pi',
     sequenceLength: 50,
     showNext: true,
     currentIndex: 0,
@@ -497,7 +522,7 @@
     endTime: null,
     active: false,
     rafId: null,
-    trailSpans: [],   // [{el, digitIndex (in PI_DIGITS)}]
+    trailSpans: [],   // [{el, digitIndex}]
   };
 
   // State Helper
@@ -612,11 +637,10 @@
     state.trailSpans.forEach(({ el }) => el.remove());
     state.trailSpans = [];
 
-    // Add 3. to the trail
-    addTrailDigit("3.", -1, false);
+    addTrailDigit(getPrefix(), -1, false);
 
     while(state.hintIndex < state.currentIndex + HINT_LENGTH && state.hintIndex < state.sequenceLength) {
-      addTrailDigit(PI_DIGITS[state.hintIndex], state.hintIndex, false);
+      addTrailDigit(getDigits()[state.hintIndex], state.hintIndex, false);
       state.hintIndex += 1
     }
   }
@@ -660,7 +684,7 @@
   function handleDigit(d) {
     if (state.endTime !== null && state.active === false && overlay.classList.contains('show')) return;
 
-    const expected = PI_DIGITS[state.currentIndex];
+    const expected = getDigits()[state.currentIndex];
 
     // Start timer on first digit
     if (state.startTime === null) {
@@ -673,7 +697,7 @@
       state.currentIndex++;
       
       while(state.hintIndex < state.currentIndex + HINT_LENGTH && state.hintIndex < state.sequenceLength) {
-        addTrailDigit(PI_DIGITS[state.hintIndex], state.hintIndex);
+        addTrailDigit(getDigits()[state.hintIndex], state.hintIndex);
         state.hintIndex += 1
       }
       
@@ -701,7 +725,7 @@
 
   function showGameOver(elapsed) {
     finalTimeEl.textContent = formatTime(elapsed);
-    finalSubEl.textContent = `${state.sequenceLength} digits of π`;
+    finalSubEl.textContent = `${state.sequenceLength} digits of ${getSymbol()}`;
     overlay.classList.add('show');
   }
 
@@ -745,6 +769,15 @@
     document.querySelectorAll('.length-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     state.sequenceLength = parseInt(btn.dataset.len, 10);
+    resetGame();
+  });
+
+  document.getElementById('constant-btns').addEventListener('click', function(e) {
+    const btn = e.target.closest('.length-btn');
+    if (!btn) return;
+    document.querySelectorAll('#constant-btns .length-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    state.constant = btn.dataset.const;
     resetGame();
   });
 
