@@ -12,7 +12,6 @@
     --bg2: #1a1040;
     --glass-bg: rgba(255,255,255,0.07);
     --glass-border: rgba(255,255,255,0.18);
-    --neon: #00f5ff, #ff00e5, #aaff00, #ff9900, #ff4466, #a64dff;
     --c0: #00f5ff;
     --c1: #ff00e5;
     --c2: #aaff00;
@@ -82,10 +81,10 @@
     white-space: nowrap;
   }
   .toggle-btn.active {
-    background: rgba(0,245,255,0.2);
-    border-color: #00f5ff;
-    color: #00f5ff;
-    text-shadow: 0 0 8px #00f5ff;
+    background: color-mix(in srgb, var(--c0) 20%, transparent);
+    border-color: var(--c0);
+    color: var(--c0);
+    text-shadow: 0 0 8px var(--c0);
   }
 
   .length-btns { display: flex; gap: 4px; }
@@ -101,10 +100,10 @@
     transition: all 0.15s;
   }
   .length-btn.active {
-    background: rgba(170,255,0,0.18);
-    border-color: #aaff00;
-    color: #aaff00;
-    text-shadow: 0 0 8px #aaff00;
+    background: color-mix(in srgb, var(--c2) 18%, transparent);
+    border-color: var(--c2);
+    color: var(--c2);
+    text-shadow: 0 0 8px var(--c2);
   }
 
   .restart-btn {
@@ -129,7 +128,7 @@
     font-weight: 700;
     letter-spacing: 0.04em;
     color: var(--white);
-    text-shadow: 0 0 20px rgba(0,245,255,0.5);
+    text-shadow: 0 0 20px color-mix(in srgb, var(--c0) 50%, transparent);
     padding: 4px 0 2px;
     min-height: 3rem;
     display: flex;
@@ -150,10 +149,10 @@
     top: 14px;
     right: 20px;
     font-size: 12px;
-    color: #ff4466;
-    text-shadow: 0 0 8px #ff446688;
+    color: var(--c4);
+    text-shadow: 0 0 8px color-mix(in srgb, var(--c4) 53%, transparent);
     background: var(--glass-bg);
-    border: 1px solid rgba(255,68,102,0.35);
+    border: 1px solid color-mix(in srgb, var(--c4) 35%, transparent);
     border-radius: 999px;
     padding: 5px 12px;
     backdrop-filter: blur(12px);
@@ -257,12 +256,12 @@
   }
 
   /* neon color classes */
-  .nc0 { color: #00f5ff; text-shadow: 0 0 10px #00f5ff88; }
-  .nc1 { color: #ff00e5; text-shadow: 0 0 10px #ff00e588; }
-  .nc2 { color: #aaff00; text-shadow: 0 0 10px #aaff0088; }
-  .nc3 { color: #ff9900; text-shadow: 0 0 10px #ff990088; }
-  .nc4 { color: #ff4466; text-shadow: 0 0 10px #ff446688; }
-  .nc5 { color: #a64dff; text-shadow: 0 0 10px #a64dff88; }
+  .nc0 { color: var(--c0); text-shadow: 0 0 10px color-mix(in srgb, var(--c0) 53%, transparent); }
+  .nc1 { color: var(--c1); text-shadow: 0 0 10px color-mix(in srgb, var(--c1) 53%, transparent); }
+  .nc2 { color: var(--c2); text-shadow: 0 0 10px color-mix(in srgb, var(--c2) 53%, transparent); }
+  .nc3 { color: var(--c3); text-shadow: 0 0 10px color-mix(in srgb, var(--c3) 53%, transparent); }
+  .nc4 { color: var(--c4); text-shadow: 0 0 10px color-mix(in srgb, var(--c4) 53%, transparent); }
+  .nc5 { color: var(--c5); text-shadow: 0 0 10px color-mix(in srgb, var(--c5) 53%, transparent); }
 
   /* Keypad */
   #keypad {
@@ -322,15 +321,15 @@
   }
   #overlay h1 {
     font-size: clamp(1.8rem, 6vw, 3rem);
-    color: #aaff00;
-    text-shadow: 0 0 30px #aaff00;
+    color: var(--c2);
+    text-shadow: 0 0 30px var(--c2);
     letter-spacing: 0.05em;
   }
   #overlay .final-time {
     font-size: clamp(2.5rem, 9vw, 5rem);
     font-weight: 700;
-    color: #00f5ff;
-    text-shadow: 0 0 40px #00f5ff;
+    color: var(--c0);
+    text-shadow: 0 0 40px var(--c0);
     letter-spacing: 0.08em;
   }
   #overlay .sub {
@@ -338,25 +337,25 @@
     font-size: 0.9rem;
   }
   #overlay .errors {
-    color: #ff4466;
-    text-shadow: 0 0 10px #ff446688;
+    color: var(--c4);
+    text-shadow: 0 0 10px color-mix(in srgb, var(--c4) 53%, transparent);
     font-size: 0.95rem;
   }
   #overlay .play-again {
-    background: rgba(0,245,255,0.15);
-    border: 1.5px solid #00f5ff;
+    background: color-mix(in srgb, var(--c0) 15%, transparent);
+    border: 1.5px solid var(--c0);
     border-radius: 999px;
     padding: 12px 36px;
     font-family: inherit;
     font-size: 1rem;
     font-weight: 700;
-    color: #00f5ff;
-    text-shadow: 0 0 10px #00f5ff;
+    color: var(--c0);
+    text-shadow: 0 0 10px var(--c0);
     cursor: pointer;
     transition: background 0.15s, transform 0.1s;
     margin-top: 8px;
   }
-  #overlay .play-again:hover { background: rgba(0,245,255,0.28); }
+  #overlay .play-again:hover { background: color-mix(in srgb, var(--c0) 28%, transparent); }
   #overlay .play-again:active { transform: scale(0.96); }
 
   @media (max-width: 480px) {
@@ -509,7 +508,6 @@
 
 
   const COLORS = 6;
-  const neonColors = ['#00f5ff','#ff00e5','#aaff00','#ff9900','#ff4466','#a64dff'];
 
   // Layout constants (computed from active slot center)
   const SLOT_WIDTH = () => Math.min(60, Math.max(42, window.innerWidth * 0.09));
