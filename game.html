@@ -20,6 +20,7 @@
     --c4: #ff4466;
     --c5: #a64dff;
     --white: rgba(255,255,255,0.9);
+    --white-dim: rgba(255,255,255,0.6);
     --dim: rgba(255,255,255,0.3);
   }
 
@@ -129,11 +130,35 @@
     letter-spacing: 0.04em;
     color: var(--white);
     text-shadow: 0 0 20px rgba(0,245,255,0.5);
-    padding: 4px 0 10px;
+    padding: 4px 0 2px;
     min-height: 3rem;
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  #digit-counter {
+    font-size: clamp(0.9rem, 2.5vw, 1.2rem);
+    color: var(--white-dim);
+    letter-spacing: 0.06em;
+    padding: 0 0 10px;
+    text-align: center;
+  }
+
+  #error-counter {
+    position: fixed;
+    top: 14px;
+    right: 20px;
+    font-size: 12px;
+    color: #ff4466;
+    text-shadow: 0 0 8px #ff446688;
+    background: var(--glass-bg);
+    border: 1px solid rgba(255,68,102,0.35);
+    border-radius: 999px;
+    padding: 5px 12px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    pointer-events: none;
   }
 
   /* Display area */
@@ -309,8 +334,13 @@
     letter-spacing: 0.08em;
   }
   #overlay .sub {
-    color: var(--dim);
+    color: var(--white-dim);
     font-size: 0.9rem;
+  }
+  #overlay .errors {
+    color: #ff4466;
+    text-shadow: 0 0 10px #ff446688;
+    font-size: 0.95rem;
   }
   #overlay .play-again {
     background: rgba(0,245,255,0.15);
@@ -364,6 +394,8 @@
 </div>
 
 <div id="timer">0:00.00</div>
+<div id="digit-counter">1</div>
+<div id="error-counter">✕ 0</div>
 
 <div id="display-wrap">
   <div id="display">
@@ -388,6 +420,7 @@
   <h1>Complete!</h1>
   <div class="final-time" id="final-time">0:00.00</div>
   <div class="sub" id="final-sub"></div>
+  <div class="errors" id="final-errors"></div>
   <button class="play-again" id="play-again">Play Again</button>
 </div>
 
@@ -523,6 +556,7 @@
     active: false,
     rafId: null,
     trailSpans: [],   // [{el, digitIndex}]
+    errors: 0,
   };
 
   // State Helper
@@ -531,11 +565,14 @@
 
   // DOM refs
   const timerEl = document.getElementById('timer');
+  const digitCounterEl = document.getElementById('digit-counter');
+  const errorCounterEl = document.getElementById('error-counter');
   const displayEl = document.getElementById('display');
   const activeSlot = document.getElementById('active-slot');
   const overlay = document.getElementById('overlay');
   const finalTimeEl = document.getElementById('final-time');
   const finalSubEl = document.getElementById('final-sub');
+  const finalErrorsEl = document.getElementById('final-errors');
 
   // ── Utilities ──────────────────────────────────────────────────────────────
 
@@ -703,6 +740,7 @@
       
       refreshAllTrail();
       resetActiveSlot();
+      digitCounterEl.textContent = `${Math.min(state.currentIndex, state.sequenceLength)}/${state.sequenceLength}`;
 
       if (state.currentIndex >= state.sequenceLength) {
         const elapsed = stopTimer();
@@ -710,6 +748,8 @@
       }
     } else {
       // Wrong
+      state.errors++;
+      errorCounterEl.textContent = `✕ ${state.errors}`;
       spawnWrongDigit(d, state.currentIndex);
       // Flash active slot red briefly
       activeSlot.style.borderColor = '#ff4466';
@@ -726,6 +766,9 @@
   function showGameOver(elapsed) {
     finalTimeEl.textContent = formatTime(elapsed);
     finalSubEl.textContent = `${state.sequenceLength} digits of ${getSymbol()}`;
+    finalErrorsEl.textContent = state.errors === 0 ? 'No errors!' : `✕ ${state.errors} error${state.errors === 1 ? '' : 's'}`;
+    finalErrorsEl.style.color = state.errors === 0 ? '#aaff00' : '';
+    finalErrorsEl.style.textShadow = state.errors === 0 ? '0 0 10px #aaff0088' : '';
     overlay.classList.add('show');
   }
 
@@ -742,6 +785,10 @@
     state.hintIndex = 0;
     state.startTime = null;
     state.endTime = null;
+    state.errors = 0;
+
+    digitCounterEl.textContent = `${Math.min(state.currentIndex, state.sequenceLength)}/${state.sequenceLength}`;
+    errorCounterEl.textContent = '✕ 0';
 
     // Reset trail
     resetTrail();
@@ -830,6 +877,7 @@
   // Initial render
   layoutStatic();
   
+  digitCounterEl.innerText = `${Math.min(state.currentIndex, state.sequenceLength)}/${state.sequenceLength}`;
   resetTrail();
 </script>
 </body>
